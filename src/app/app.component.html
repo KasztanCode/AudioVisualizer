@@ -1,0 +1,21 @@
+<div class="background">
+ <div class="content">
+   <div class="imageBox">
+     <img src="./assets/cypo.jpg" id="image">
+   </div>
+
+   <div class="controls">
+     <div class="progressDivs">
+       <p class="time">{{elapsedTime}}</p>
+       <div class="progressbar">
+         <div class="progress"></div>
+       </div>
+       <p class="time">{{durationInSeconds}}</p>
+     </div>
+     <div class="buttonBox">
+       <button class="playButton" (click)="play()">Play</button>
+       <button class="playButton"(click)="pause()">Stop</button>
+     </div>
+   </div>
+ </div>
+</div>

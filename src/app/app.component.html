@@ -4,7 +4,7 @@
 <div class="background">
   <div class="content">
     <div class="imageBox">
-      <img [src]="'./assets/cypo.jpg'" id="image" [ngClass]="{'rotate': isPlaying}" alt="cypo" height="1600" width="1600">
+      <img [src]="'./assets/cypo.jpg'" id="image" [ngClass]="{'animation': isPlaying}" alt="cypo" height="1600" width="1600">
     </div>
 
     <div class="controls">
@@ -13,7 +13,7 @@
       </div>
       <div class="progressDivs">
         <p class="time">{{ audioPlayer.currentTime | secondsToMinutes }}</p>
-        <div class="progressbar" #progressbar (mouseenter)="onMouseEnter($event)" (mouseleave)="onMouseLeave($event)" (mousemove)="onMouseMove($event)" (click)="onProgressClick()">
+        <div class="progressbar" #progressbar (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()" (mousemove)="onMouseMove($event)" (click)="onProgressClick()">
           <div [ngStyle]="{'width.%': isProgressClicked ? highlightedPercent: progressPercent}" class="progress"></div>
           <div [ngStyle]="{'width.px': highlightedPoint-progressLeftX}" *ngIf="isInsideDiv" class="progressHighlighted"></div>
         </div>
@@ -30,5 +30,13 @@
       </div>
     </div>
 
+    <div class="testcontainer">
+      <div class="test" [ngStyle]="{'width.rem':lolfreq1/2}"></div>
+      <div class="test" [ngStyle]="{'width.rem':lolfreq2/2}"></div>
+      <div class="test" [ngStyle]="{'width.rem':lolfreq3/2}"></div>
+      <div class="test" [ngStyle]="{'width.rem':lolfreq4/2}"></div>
+    </div>
+
   </div>
 </div>
+

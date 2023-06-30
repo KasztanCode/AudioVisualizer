@@ -8,7 +8,6 @@
   height: 55rem;
   border-radius: 100rem;
   border: 3px solid #a1a1a1;
-
 }
 .imageBox{
 
@@ -127,8 +126,8 @@
 
 }
 
-.rotate{
-  animation: rotate 2s linear infinite;
+.animation{
+  animation: animation 2s linear infinite;
 }
 .play{
   background-image: url("../assets/play.svg");
@@ -167,7 +166,7 @@
   background-image: url("../assets/pause.svg");
 }
 
-@keyframes rotate {
+@keyframes animation {
   0% {
     rotate: 0deg;
   }
@@ -175,5 +174,65 @@
   100%{
     rotate: 360deg;
   }
+}
 
+@media (max-height: 800px) {
+  #image{
+    width: 40rem;
+    height: 40rem;
+  }
+}
+
+@media (max-height: 600px) {
+  #image{
+    width: 35rem;
+    height: 35rem;
+  }
+}
+
+@media (max-height: 520px) {
+  #image{
+    width: 30rem;
+    height: 30rem;
+  }
+}
+
+@media (max-width: 600px) {
+  #image{
+    width: 35rem;
+    height: 35rem;
+  }
+  .controlBox{
+    width: 40rem;
+  }
+
+  .progressDivs{
+    width: 40rem;
+  }
+}
+
+@media (max-width:450px) {
+  #image{
+    width: 30rem;
+    height: 30rem;
+  }
+  .controlBox{
+    width: 35rem;
+  }
+
+  .progressDivs{
+    width: 40rem;
+  }
+}
+
+.test{
+
+  height:2rem;
+  background-color: aqua;
+}
+.testcontainer{
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  align-items: center;
 }

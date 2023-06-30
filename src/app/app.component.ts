@@ -1,101 +1,164 @@
-import { Component, ViewChild, ElementRef, AfterViewInit, HostListener } from '@angular/core';
+import {
+  Component,
+  ViewChild,
+  ElementRef,
+  AfterViewInit,
+  HostListener,
+} from '@angular/core';
 
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
-  styleUrls: ['./app.component.scss']
+  styleUrls: ['./app.component.scss'],
 })
 export class AppComponent implements AfterViewInit {
   @ViewChild('audioPlayer') audioPlayer!: ElementRef<HTMLAudioElement>;
   @ViewChild('progressbar', { static: false }) progressbar!: ElementRef;
 
   isPlaying: boolean = false;
-  progressPercent: number = 0;
+  isProgressClicked: boolean = false;
+  isInsideDiv: boolean = false;
+
   volume: number = 0.2;
   durationInSeconds: number = 0;
   timer: any;
-  isInsideDiv: boolean = false;
-  progressLeftX!: number;
-  progressRightX!: number;
+
   highlightedTime: number = 0;
   highlightedPoint!: number;
-  viewportWidth!: number;
-  viewportHeight!: number;
-  highlightedPercent!:number
-  isProgressClicked:boolean = false
+  highlightedPercent!: number;
+
+  progressPercent: number = 0;
+  progressLeftX!: number;
+  progressRightX!: number;
+
+  frequencyDataSize: number = 512;
+  sampleRate!: number;
+  frequencyRange!: number;
+  frequencyResolution!: number;
+  lolfreq!: number[];
+  lolfreq1!: number;
+  lolfreq2!: number;
+  lolfreq3!: number;
+  lolfreq4!: number;
 
   ngAfterViewInit() {
     this.audioPlayer.nativeElement.addEventListener('loadedmetadata', () => {
       this.durationInSeconds = this.audioPlayer.nativeElement.duration;
-      this.findProgressEdges();
     });
+    this.audioPlayer.nativeElement.volume = this.volume;
+    this.findDivsEdges(this.progressbar);
+  }
+
+  startAudioAnalysis() {
+    const audioContext = new AudioContext();
+    const sourceNode = audioContext.createMediaElementSource(
+      this.audioPlayer.nativeElement
+    );
+    const analyserNode = audioContext.createAnalyser();
+
+    sourceNode.connect(analyserNode);
+    analyserNode.connect(audioContext.destination);
+    analyserNode.fftSize = this.frequencyDataSize;
+    this.sampleRate = audioContext.sampleRate;
+    this.frequencyRange = this.sampleRate / 2;
+    this.frequencyResolution = this.sampleRate / this.frequencyDataSize;
+
+    const frequencyData = new Uint8Array(analyserNode.frequencyBinCount);
+
+    const analyzeAudio = () => {
+      analyserNode.getByteFrequencyData(frequencyData);
+      this.lolfreq = [...frequencyData];
+      console.log(
+        this.sampleRate,
+        this.frequencyRange,
+        this.frequencyResolution
+      );
+
+      // Log the frequency data
+      for (let i = 0; i < this.lolfreq.length; i++) {
+        const frequency = i * this.frequencyResolution;
+        const magnitude = this.lolfreq[i];
+        console.log(
+          `Frequency: ${frequency.toFixed(2)} Hz, Magnitude: ${magnitude}`
+        );
+      }
+
+      this.lolfreq1 = this.lolfreq[1];
+      this.lolfreq2 = this.lolfreq[10];
+      this.lolfreq3 = this.lolfreq[17];
+      this.lolfreq4 = this.lolfreq[22];
+
+      // Call the analyzeAudio function recursively
+      requestAnimationFrame(analyzeAudio);
+    };
+
+    analyzeAudio();
   }
 
   @HostListener('window:resize', ['$event'])
-  onWindowResize(event: Event): void {
-    this.viewportWidth = window.innerWidth;
-    this.viewportHeight = window.innerHeight;
-    this.findProgressEdges();
+  onWindowResize(): void {
+    this.findDivsEdges(this.progressbar);
   }
 
-  findProgressEdges() {
-    const progressBarElement: HTMLElement = this.progressbar.nativeElement;
+  findDivsEdges(div: any) {
+    const progressBarElement: HTMLElement = div.nativeElement;
     const rect: DOMRect = progressBarElement.getBoundingClientRect();
     this.progressLeftX = rect.left;
     this.progressRightX = rect.right;
   }
 
   onProgressClick() {
-    this.highlightedPercent = (this.highlightedPoint - this.progressLeftX) / (this.progressRightX - this.progressLeftX)*100;
-    this.isProgressClicked = true
+    this.highlightedPercent =
+      ((this.highlightedPoint - this.progressLeftX) /
+        (this.progressRightX - this.progressLeftX)) *
+      100;
+    this.isProgressClicked = true;
     this.audioPlayer.nativeElement.currentTime = this.highlightedTime;
   }
 
-  onMouseEnter(event: MouseEvent) {
+  onMouseEnter() {
     this.isInsideDiv = true;
   }
 
-  onMouseLeave(event: MouseEvent) {
+  onMouseLeave() {
     this.isInsideDiv = false;
   }
 
   onMouseMove(event: MouseEvent) {
     if (this.isInsideDiv) {
       this.highlightedPoint = event.clientX;
-      this.highlightedTime = this.durationInSeconds * (this.highlightedPoint - this.progressLeftX) / (this.progressRightX - this.progressLeftX);
+      this.highlightedTime =
+        (this.durationInSeconds *
+          (this.highlightedPoint - this.progressLeftX)) /
+        (this.progressRightX - this.progressLeftX);
     }
   }
-
-  play() {
-    this.audioPlayer.nativeElement.play();
-    this.isPlaying = true;
-    this.startTimer();
-    this.audioPlayer.nativeElement.volume = this.volume;
-  }
-
-  pause() {
-    this.audioPlayer.nativeElement.pause();
-    this.isPlaying = false;
-    this.stopTimer();
-  }
-
   togglePlay() {
     if (this.isPlaying) {
-      this.pause();
+      this.audioPlayer.nativeElement.pause();
+      this.isPlaying = false;
+      this.stopTimer();
     } else {
-      this.play();
+      this.audioPlayer.nativeElement.play();
+      this.isPlaying = true;
+      this.startTimer();
+      this.startAudioAnalysis();
     }
   }
 
   startTimer() {
-    this.progressPercent = (this.audioPlayer.nativeElement.currentTime / this.durationInSeconds) * 100;
     this.timer = setInterval(() => {
-      this.progressPercent = (this.audioPlayer.nativeElement.currentTime / this.durationInSeconds) * 100;
-      if (Math.floor(this.audioPlayer.nativeElement.currentTime) === Math.floor(this.durationInSeconds)) {
+      this.progressPercent =
+        (this.audioPlayer.nativeElement.currentTime / this.durationInSeconds) *
+        100;
+      if (
+        Math.floor(this.audioPlayer.nativeElement.currentTime) ===
+        Math.floor(this.durationInSeconds)
+      ) {
         this.stopTimer();
       }
-      this.isProgressClicked=false
-    }, 10);
+      this.isProgressClicked = false;
+    }, 1000);
   }
 
   stopTimer() {

@@ -1,0 +1,43 @@
+<audio #audioPlayer>
+  <source src="../assets/cypoV2.mp3" type="audio/mpeg">
+</audio>
+<div class="background">
+  <div class="content">
+    <div class="imageBox">
+      <img [src]="'./assets/cypo.jpg'" id="image" [ngStyle]="{'width.rem': 55 + AvarageMagnitude/10, 'height.rem':55 + AvarageMagnitude/10}" alt="cypo" >
+      <div class="AudioVisualizerBlack" *ngFor="let box of cutFrequenciesArray; index as i"
+           [style.transform]="'rotate(' + i/2 + 'deg) ' + calculateTransformOffset(AvarageMagnitude)">
+				<div class="magBar" [ngStyle]="{'width.px':cutFrequenciesArray[i]}">
+
+				</div>
+			</div>
+    </div>
+
+    <div class="controls">
+      <div class="highlightedTimeSlider">
+        <p class="highlightedTime" *ngIf="isInsideDiv" [ngStyle]="{'left.px':(highlightedPoint-progressLeftX)-25}">{{ highlightedTime | secondsToMinutes }}</p>
+      </div>
+      <div class="progressDivs">
+        <p class="time">{{ audioPlayer.currentTime | secondsToMinutes }}</p>
+        <div class="progressbar" #progressbar (mouseenter)="onMouseEnter()" (mouseleave)="onMouseLeave()" (mousemove)="onMouseMove($event)" (click)="onProgressClick()">
+          <div [ngStyle]="{'width.%': isProgressClicked ? highlightedPercent: progressPercent}" class="progress"></div>
+          <div [ngStyle]="{'width.px': highlightedPoint-progressLeftX}" *ngIf="isInsideDiv" class="progressHighlighted"></div>
+        </div>
+        <p class="time">{{ durationInSeconds | secondsToMinutes }}</p>
+      </div>
+      <div class="controlBox">
+        <div class="filler"></div>
+        <button class="playButton" (click)="togglePlay()" [ngClass]="{'play': !isPlaying, 'pause': isPlaying}"></button>
+        <div class="filler">
+          <img class="volumeImage" src="assets/volumeDown.svg">
+          <input type="range" class="filler volumeControl" min="0" max="1" step="0.01" [(ngModel)]="volume" (input)="changeVolume()">
+          <img class="volumeImage" src="assets/volumeUp.svg">
+        </div>
+      </div>
+    </div>
+
+
+
+    </div>
+  </div>
+

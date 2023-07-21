@@ -5,6 +5,8 @@ import {
   AfterViewInit,
   HostListener,
 } from '@angular/core';
+
+
 @Component({
   selector: 'app-root',
   templateUrl: './app.component.html',
@@ -145,6 +147,7 @@ export class AppComponent implements AfterViewInit {
         Math.floor(this.audioPlayer.nativeElement.currentTime) ===
         Math.floor(this.durationInSeconds)
       ) {
+				this.isPlaying = false
         this.stopTimer();
       }
       this.isProgressClicked = false;

@@ -1,0 +1,42 @@
+<audio #audioPlayer>
+	<source src="!! put song path here !!" type="audio/mpeg">
+</audio>
+	<div class="content">
+		<!-- Dont forget to put background image path in app.component.scss file at line 3 -->
+		<div class="imageBox">
+			<img [src]="'!!put image path here!!" id="image" [ngStyle]="{'width.rem': 55 + this.AvarageMagnitude/10, 'height.rem':55 + this.AvarageMagnitude/10}" alt="cypo" >
+			<div class="AudioVisualizerBlack" *ngFor="let box of this.cutFrequenciesArray; index as i"
+					 [style.transform]="'rotate(' + i + 'deg) ' + this.calculateTransformOffset(this.AvarageMagnitude)">
+				<div class="magBar" [ngStyle]="{'width.px':this.cutFrequenciesArray[i]}">
+
+				</div>
+			</div>
+		</div>
+
+		<div class="controls">
+			<div class="highlightedTimeSlider">
+				<p class="highlightedTime" *ngIf="this.isInsideDiv" [ngStyle]="{'left.px':(this.highlightedPoint-this.progressLeftX)-25}">{{ this.highlightedTime | secondsToMinutes }}</p>
+			</div>
+			<div class="progressDivs">
+				<p class="time">{{ audioPlayer.currentTime | secondsToMinutes }}</p>
+				<div class="progressbar" #progressbar (mouseenter)="this.onMouseEnter()" (mouseleave)="this.onMouseLeave()" (mousemove)="this.onMouseMove($event)" (click)="this.onProgressClick()">
+					<div [ngStyle]="{'width.%': this.isProgressClicked ? this.highlightedPercent: this.progressPercent}" class="progress"></div>
+					<div [ngStyle]="{'width.px': this.highlightedPoint-this.progressLeftX}" *ngIf="this.isInsideDiv" class="progressHighlighted"></div>
+				</div>
+				<p class="time">{{ this.durationInSeconds | secondsToMinutes }}</p>
+			</div>
+			<div class="controlBox">
+				<div class="filler"></div>
+				<button class="playButton" (click)="this.togglePlay()" [ngClass]="{'play': !this.isPlaying, 'pause': this.isPlaying}"></button>
+				<div class="filler">
+					<img class="volumeImage" src="./assets/volumeDown.svg">
+					<input type="range" class="filler volumeControl" min="0" max="1" step="0.01" [(ngModel)]="volume" (input)="changeVolume()">
+					<img class="volumeImage" src="./assets/volumeUp.svg">
+				</div>
+			</div>
+		</div>
+
+
+
+	</div>
+

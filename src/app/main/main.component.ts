@@ -1,10 +1,6 @@
-import {
-	Component,
-	ViewChild,
-	ElementRef,
-	AfterViewInit,
-	HostListener,
-} from '@angular/core';
+import {Component, ViewChild, ElementRef, AfterViewInit, HostListener} from '@angular/core';
+import {SharedService} from "../shared/shared.service";
+import * as p5 from 'p5';
 
 @Component({
   selector: 'app-main',
@@ -38,13 +34,85 @@ export class MainComponent implements AfterViewInit{
 	frequenciesArray!: number[];
 	AvarageMagnitude!: number;
 	cutFrequenciesArray!:number[];
+	songPath: any;
+	imagePath: any;
+
+	private p5:any;
+
+	constructor(private sharedService: SharedService) { }
+
 	ngAfterViewInit() {
+		this.sharedService.variable1$.subscribe(value => {
+			this.songPath = value;
+			this.audioPlayer.nativeElement.load();
+			if (this.isPlaying) {
+				this.audioPlayer.nativeElement.play().then(() => {
+					console.log('New audio playing.');
+					this.startAudioAnalysis();
+					this.isPlaying = true;
+				}).catch(error => {
+					console.error('New audio playback failed.', error);
+				});
+			} else {
+				this.startAudioAnalysis();
+			}
+		});
+		this.sharedService.variable2$.subscribe(value => this.imagePath = value);
+
+
 		this.audioPlayer.nativeElement.addEventListener('loadedmetadata', () => {
 			this.durationInSeconds = this.audioPlayer.nativeElement.duration;
 		});
 		this.audioPlayer.nativeElement.volume = this.volume;
 		this.findDivsEdges(this.progressbar);
+
+		this.createCanvas();
+
 	}
+
+	private createCanvas() {
+		const canvasContainer = document.getElementById('canvas-container');
+
+		if (canvasContainer) {
+			this.p5 = new p5(this.sketch.bind(this), canvasContainer);
+		} else {
+			console.error('Cannot find element with id "canvas-container"');
+		}
+	}
+
+	private sketch(p5Instance: any) {
+
+		const lengths = new Array(360).fill(0);
+
+		p5Instance.setup = () => {
+			p5Instance.createCanvas(800, 1000);
+			p5Instance.stroke(0); // set the line color to white
+			p5Instance.strokeWeight(2); // set the thickness of the line
+		};
+
+		p5Instance.draw = () => {
+			let innerRadius = 200 + this.AvarageMagnitude/2
+			p5Instance.background(255,255,255);
+			p5Instance.translate(p5Instance.width / 2, p5Instance.height / 3); // move the origin to the center of the canvas
+
+			for(let i = 0; i < 360; i++) {
+				let angle = p5Instance.radians(i);
+
+				// update the lengths array with new line lengths
+				lengths[i] = this.cutFrequenciesArray[i]/2;
+				lengths[i] = p5Instance.constrain(lengths[i], 0, 100);
+				console.log(angle)
+
+				let x1 = innerRadius * p5Instance.sin(angle);
+				let y1 = innerRadius * p5Instance.cos(angle);
+				let x2 = (innerRadius + lengths[i]) * p5Instance.sin(angle);
+				let y2 = (innerRadius + lengths[i]) * p5Instance.cos(angle);
+
+				p5Instance.line(x1, y1, x2, y2);
+			}
+		};
+	}
+
 
 	startAudioAnalysis() {
 		const audioContext = new AudioContext();
@@ -66,7 +134,7 @@ export class MainComponent implements AfterViewInit{
 
 			analyserNode.getByteFrequencyData(frequencyData);
 			this.frequenciesArray = [...frequencyData];
-			this.cutFrequenciesArray = this.frequenciesArray.slice(30,390)
+			this.cutFrequenciesArray = this.frequenciesArray.slice(20,380)
 
 			this.AvarageMagnitude =
 				this.frequenciesArray.reduce((a, b) => a + b) /
@@ -124,16 +192,20 @@ export class MainComponent implements AfterViewInit{
 				(this.progressRightX - this.progressLeftX);
 		}
 	}
-	togglePlay() {
+	togglePlay(): void {
 		if (this.isPlaying) {
 			this.audioPlayer.nativeElement.pause();
+			console.log('Pause');
 			this.isPlaying = false;
-			this.stopTimer();
+			this.stopTimer(); // Stop timer when song is paused
 		} else {
-			this.audioPlayer.nativeElement.play();
-			this.isPlaying = true;
-			this.startTimer();
-			this.startAudioAnalysis();
+			this.audioPlayer.nativeElement.play().then(() => {
+				console.log('Play started');
+				this.startTimer(); // Start timer when song is played
+				this.isPlaying = true;
+			}).catch(error => {
+				console.error('Playback failed.', error);
+			});
 		}
 	}
 

@@ -1,10 +1,11 @@
 <audio #audioPlayer>
-	<source src="!! put song path here !!" type="audio/mpeg">
+	<source [src]="songPath" type="audio/mpeg">
 </audio>
 	<div class="content">
-		<!-- Dont forget to put background image path in app.component.scss file at line 3 -->
+		<div id="canvas-container"></div>
+
 		<div class="imageBox">
-			<img [src]="'!!put image path here!!" id="image" [ngStyle]="{'width.rem': 55 + this.AvarageMagnitude/10, 'height.rem':55 + this.AvarageMagnitude/10}" alt="cypo" >
+			<img [src]="imagePath" id="image" [ngStyle]="{'width.rem': 55 + this.AvarageMagnitude/10, 'height.rem':55 + this.AvarageMagnitude/10}" alt="cypo" >
 			<div class="AudioVisualizerBlack" *ngFor="let box of this.cutFrequenciesArray; index as i"
 					 [style.transform]="'rotate(' + i + 'deg) ' + this.calculateTransformOffset(this.AvarageMagnitude)">
 				<div class="magBar" [ngStyle]="{'width.px':this.cutFrequenciesArray[i]}">

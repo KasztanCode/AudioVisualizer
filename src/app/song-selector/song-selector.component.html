@@ -2,20 +2,11 @@
 	<div class="content">
 		<nav class="songSelector">
 			<div>
-				<button class="songButton">
-					<div class="songImage"></div>
-					<p class="songTitle">Cypo Html</p>
+				<button class="songButton" (click)="buttonClick(songs[i].path,songs[i].imagePath,songs[i].backgroundPath, i)" *ngFor="let songButton of songs; index as i">
+					<div class="songImage" [ngStyle]="{'background-image': 'url(' + songs[i].imagePath + ')'}" [ngClass]="{'highlighted':i === highlightedButton}"></div>
+					<p class="songTitle">{{songs[i].name}}</p>
 				</button>
 
-				<button class="songButton">
-					<div class="songImage"></div>
-					<p class="songTitle">Kajtos Html</p>
-				</button>
-
-				<button class="songButton">
-					<div class="songImage"></div>
-					<p class="songTitle">Adam Html</p>
-				</button>
 
 			</div>
 		</nav>

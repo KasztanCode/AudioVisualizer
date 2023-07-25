@@ -28,12 +28,12 @@
 	justify-content: space-between;
 	border: none;
 	padding: 0;
-	transition: 0.5s;
+	transition: 0.3s;
 	background-color: rgba(0, 0, 0, 0.3);
 }
 
 .songImage{
-	background-color: #952828;
+	background-size: cover;
 	width: 5rem;
 	height: 5rem;
 	border-radius: 1000px;
@@ -50,6 +50,13 @@
 	justify-content: flex-start;
 }
 
+.highlighted{
+	border: solid 2px rgb(161, 161, 161);
+	width: calc(5rem - 4px);
+	height: calc(5rem - 4px);
+	transition: 0.05s;
+}
+
 .songButton:hover{
 	width: 20rem;
 	align-items: flex-start;
@@ -57,8 +64,9 @@
 
 .songButton:hover .songTitle{
 	animation-name: titleAnimation;
-	animation-duration: 1s;
+	animation-duration: 0.6s;
 	animation-fill-mode: forwards;
+	animation-timing-function: ease-in-out;
 }
 
 @keyframes titleAnimation {

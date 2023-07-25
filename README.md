@@ -34,7 +34,7 @@ I created it to learn techniques that will be used in some of my next projects.
 
 1. Clone the repo
 	 ```sh
-	 git clone https://github.com/your_username_/Project-Name.git
+	 git clone https://github.com/KasztanCode/AudioVisualizer.git
 	 ```
 2. Install NPM packages
 	 ```sh
@@ -51,7 +51,7 @@ I created it to learn techniques that will be used in some of my next projects.
 	 ```
 4. build the app
 5. ```sh 
-			ng build
+		ng build
 	 ```
 
 <p align="right">(<a href="#readme-top">back to top</a>)</p>

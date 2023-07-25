@@ -49,12 +49,10 @@ I created it to learn techniques that will be used in some of my next projects.
 			backgroundPath: '../assets/backgroundImage.jpg'
 		}
 	 ```
-4. build the app
-5. ```sh 
+4. Build the app
+	  ```sh
 		ng build
-	 ```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+		```
 
 ## Contact
 
@@ -62,7 +60,6 @@ KasztanCode -  kasztangaming73@gmail.com
 
 Project Link: [link](https://github.com/KasztanCode/AudioVisualizer)
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
 
 
 

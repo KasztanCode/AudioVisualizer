@@ -52,7 +52,6 @@ I created it to learn techniques that will be used in some of my next projects.
 4. Build the app
 	  ```sh
 		ng build
-		```
 
 ## Contact
 

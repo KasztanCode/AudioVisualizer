@@ -28,8 +28,6 @@ I created it to learn techniques that will be used in some of my next projects.
 
 [![Angular][Angular.io]][Angular-url]
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
 ### Installation
 
 1. Clone the repo

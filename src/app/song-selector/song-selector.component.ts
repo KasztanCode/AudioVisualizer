@@ -9,23 +9,30 @@ import {SharedService} from "../shared/shared.service";
 export class SongSelectorComponent implements OnInit{
 	songs:any[] = [
 		{
-			name:'Adam Html',
+			name:'Song',
 			path: './assets/Breath.mp3',
-			imagePath: './assets/cover.jpg',
-			backgroundPath: '../assets/cover.jpg'
+			imagePath: './assets/photo-placeholder-icon-17-3692647226.jpg',
+			backgroundPath: '../assets/placeholder_template-2067894904.jpg'
 		},
 		{
-			name:'Cypo Html',
-			path: './assets/cypoV2.mp3',
-			imagePath: './assets/cypo.jpg',
-			backgroundPath: '../assets/cypo.jpg'
+			name:'Song',
+			path: './assets/Breath.mp3',
+			imagePath: './assets/photo-placeholder-icon-17-3692647226.jpg',
+			backgroundPath: '../assets/placeholder_template-2067894904.jpg'
 		},
 		{
-			name:'Goosebumps',
-			path: './assets/goo.mp3',
-			imagePath: './assets/cypo.jpg',
-			backgroundPath: '../assets/cypo.jpg'
-		}
+			name:'Song',
+			path: './assets/Breath.mp3',
+			imagePath: './assets/photo-placeholder-icon-17-3692647226.jpg',
+			backgroundPath: '../assets/placeholder_template-2067894904.jpg'
+		},
+		{
+			name:'Song',
+			path: './assets/Breath.mp3',
+			imagePath: './assets/photo-placeholder-icon-17-3692647226.jpg',
+			backgroundPath: '../assets/placeholder_template-2067894904.jpg'
+		},
+
 	]
 
 	highlightedButton!:number;

@@ -1,27 +1,72 @@
-# CypoHtml
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 16.1.1.
 
-## Development server
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
 
-## Code scaffolding
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
 
-## Build
+<h3 align="center">Audio Visualizer</h3>
+<h3 align="center">[WIP]</h3>
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+  <p align="center">
+    An awesome audio visualizer for your songs 
+    <br />
+    <a href="https://kasztancode.pl/AudioVisualizer">View Demo</a>
+    ·
+    <a href="https://github.com/KasztanCode/AudioVisualizer/issues">Report Bug</a>
+    ·
+    <a href="https://github.com/KasztanCode/AudioVisualizer/issues">Request Feature</a>
+  </p>
 
-## Running unit tests
+![Product Name Screen Shot](src/assets/showcase.gif)
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## About The Project
 
-## Running end-to-end tests
+Name is pretty self-explanatory, but it is a simple audio visualizing website.
+I created it to learn techniques that will be used in some of my next projects.
 
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
+### Built With
 
-## Further help
+[![Angular][Angular.io]][Angular-url]
 
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.io/cli) page.
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+### Installation
+
+1. Clone the repo
+	 ```sh
+	 git clone https://github.com/your_username_/Project-Name.git
+	 ```
+2. Install NPM packages
+	 ```sh
+	 npm install
+	 ```
+3. add your song to songs array `song-selector.component.ts`
+	 ```ts
+	 {
+			name:'Song',
+			path: './assets/song.mp3',
+			imagePath: './assets/songImage.jpg',
+			backgroundPath: '../assets/backgroundImage.jpg'
+		}
+	 ```
+4. build the app
+5. ```sh 
+			ng build
+	 ```
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+## Contact
+
+KasztanCode -  kasztangaming73@gmail.com
+
+Project Link: [link](https://github.com/KasztanCode/AudioVisualizer)
+
+<p align="right">(<a href="#readme-top">back to top</a>)</p>
+
+
+
+
+
+[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
+[Angular-url]: https://angular.io/

@@ -2,16 +2,9 @@
 	<source [src]="songPath" type="audio/mpeg">
 </audio>
 	<div class="content">
-		<div id="canvas-container"></div>
-
 		<div class="imageBox">
-			<img [src]="imagePath" id="image" [ngStyle]="{'width.rem': 55 + this.AvarageMagnitude/10, 'height.rem':55 + this.AvarageMagnitude/10}" alt="cypo" >
-			<div class="AudioVisualizerBlack" *ngFor="let box of this.cutFrequenciesArray; index as i"
-					 [style.transform]="'rotate(' + i + 'deg) ' + this.calculateTransformOffset(this.AvarageMagnitude)">
-				<div class="magBar" [ngStyle]="{'width.px':this.cutFrequenciesArray[i]}">
-
-				</div>
-			</div>
+			<div id="soundVisualizer-canvas"></div>
+			<div class="image" [ngStyle]="{'width.px':imageRadius*2,'height.px':imageRadius*2,'background-image': 'url(' + imagePath + ')' }"></div>
 		</div>
 
 		<div class="controls">

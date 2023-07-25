@@ -27,21 +27,25 @@ export class MainComponent implements AfterViewInit{
 	progressLeftX!: number;
 	progressRightX!: number;
 
-	frequencyDataSize: number = 2048;
+	frequencyDataSize: number = 4096;
 	sampleRate!: number;
 	frequencyRange!: number;
 	frequencyResolution!: number;
 	frequenciesArray!: number[];
-	AvarageMagnitude!: number;
+	averageMagnitude!: number;
 	cutFrequenciesArray!:number[];
+
 	songPath: any;
 	imagePath: any;
+
+	imageRadius!:number;
 
 	private p5:any;
 
 	constructor(private sharedService: SharedService) { }
 
 	ngAfterViewInit() {
+		this.createSoundVisualizerCanvas();
 		this.sharedService.variable1$.subscribe(value => {
 			this.songPath = value;
 			this.audioPlayer.nativeElement.load();
@@ -65,13 +69,10 @@ export class MainComponent implements AfterViewInit{
 		});
 		this.audioPlayer.nativeElement.volume = this.volume;
 		this.findDivsEdges(this.progressbar);
-
-		this.createCanvas();
-
 	}
 
-	private createCanvas() {
-		const canvasContainer = document.getElementById('canvas-container');
+	private createSoundVisualizerCanvas() {
+		const canvasContainer = document.getElementById('soundVisualizer-canvas');
 
 		if (canvasContainer) {
 			this.p5 = new p5(this.sketch.bind(this), canvasContainer);
@@ -80,39 +81,35 @@ export class MainComponent implements AfterViewInit{
 		}
 	}
 
-	private sketch(p5Instance: any) {
+	private sketch(soundVisualizer: any) {
 
-		const lengths = new Array(360).fill(0);
-
-		p5Instance.setup = () => {
-			p5Instance.createCanvas(800, 1000);
-			p5Instance.stroke(0); // set the line color to white
-			p5Instance.strokeWeight(2); // set the thickness of the line
+		soundVisualizer.setup = () => {
+			soundVisualizer.createCanvas(800, 800);
+			soundVisualizer.strokeWeight(2);
 		};
 
-		p5Instance.draw = () => {
-			let innerRadius = 200 + this.AvarageMagnitude/2
-			p5Instance.background(255,255,255);
-			p5Instance.translate(p5Instance.width / 2, p5Instance.height / 3); // move the origin to the center of the canvas
+		soundVisualizer.draw = () => {
+			this.imageRadius = 200 + this.averageMagnitude/2
+			soundVisualizer.clear()
+			soundVisualizer.translate(soundVisualizer.width / 2, soundVisualizer.height / 2); // move the origin to the center of the canvas
 
-			for(let i = 0; i < 360; i++) {
-				let angle = p5Instance.radians(i);
+			for(let i = 0; i < 720; i++) {
+				if(i <360){
+					soundVisualizer.stroke(161,161,161,123);
+				}else{
+					soundVisualizer.stroke(161,161,161,180);
+				}
+				let angle = soundVisualizer.radians(i);
 
-				// update the lengths array with new line lengths
-				lengths[i] = this.cutFrequenciesArray[i]/2;
-				lengths[i] = p5Instance.constrain(lengths[i], 0, 100);
-				console.log(angle)
+				let x1 = this.imageRadius * soundVisualizer.sin(angle);
+				let y1 = this.imageRadius * soundVisualizer.cos(angle);
+				let x2 = (this.imageRadius + this.cutFrequenciesArray[i]/2) * soundVisualizer.sin(angle);
+				let y2 = (this.imageRadius + this.cutFrequenciesArray[i]/2) * soundVisualizer.cos(angle);
 
-				let x1 = innerRadius * p5Instance.sin(angle);
-				let y1 = innerRadius * p5Instance.cos(angle);
-				let x2 = (innerRadius + lengths[i]) * p5Instance.sin(angle);
-				let y2 = (innerRadius + lengths[i]) * p5Instance.cos(angle);
-
-				p5Instance.line(x1, y1, x2, y2);
+				soundVisualizer.line(x1, y1, x2, y2);
 			}
 		};
 	}
-
 
 	startAudioAnalysis() {
 		const audioContext = new AudioContext();
@@ -134,24 +131,17 @@ export class MainComponent implements AfterViewInit{
 
 			analyserNode.getByteFrequencyData(frequencyData);
 			this.frequenciesArray = [...frequencyData];
-			this.cutFrequenciesArray = this.frequenciesArray.slice(20,380)
+			this.cutFrequenciesArray = this.frequenciesArray.slice(20,740)
 
-			this.AvarageMagnitude =
+			this.averageMagnitude =
 				this.frequenciesArray.reduce((a, b) => a + b) /
 				this.frequenciesArray.length;
-
-			// Call the analyzeAudio function recursively
 
 			requestAnimationFrame(analyzeAudio);
 
 		};
 
 		analyzeAudio();
-	}
-
-	calculateTransformOffset(averageMagnitude: number): string {
-		const offset = averageMagnitude / 10; // Adjust the offset calculation as needed
-		return `translate(${offset + 35}rem, 0rem)`;
 	}
 
 	@HostListener('window:resize', ['$event'])

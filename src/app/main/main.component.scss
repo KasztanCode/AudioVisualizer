@@ -1,13 +1,8 @@
 
-#image{
-	width: 55rem;
-	height: 55rem;
-	border-radius: 100rem;
-	border: 3px solid #a1a1a1;
-
-}
 .imageBox{
+	position: relative;
 	height: 70vh;
+	width: 80rem;
 	display: flex;
 	justify-content: center;
 	align-items: center;
@@ -154,6 +149,14 @@
 .pause{
 	background-image: url("../../assets/pause.svg");
 	background-size: contain;
+}
+.image{
+	position: absolute;
+	border: 3px solid #a1a1a1;
+	background-size: cover;
+	border-radius: 1000px;
+	background-color: aqua;
+
 }
 
 .AudioVisualizerBlack{
